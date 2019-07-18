@@ -3,7 +3,7 @@ import numpy as np
 from PIL import Image
 import matplotlib.pyplot as plt
 from torch.utils.data import Dataset
-from data_loaders import transform as my_transforms
+from data_loaders import transforms as my_transforms
 to_tensor  = my_transforms.ToTensor()
 
 def pil_loader(path,rgb = True):
@@ -48,7 +48,7 @@ class KittiFolder(Dataset):
         s = np.random.uniform(1.0,1.5)
         angle = np.random.uniform(-5.0,5.0)
         do_flip = np.random.uniform(0.0,1.0)<0.5
-        color_jitter = my_transform.ColorJitter(0.4,0.4,0.4)
+        # color_jitter = my_transform.ColorJitter(0.4,0.4,0.4)
         transform = my_transforms.Compose([
             my_transforms.Crop(130,10,240,1200),
             my_transforms.Resize(460/240,interpolation='bilinear'),
@@ -58,7 +58,7 @@ class KittiFolder(Dataset):
             my_transforms.HorizontalFlip(do_flip)
         ])
         im_ = transform(im)
-        im_ = color_jitter(im_)
+        # im_ = color_jitter(im_)
         gt_ = transform(gt)
         im_ = np.array(im_).astype(np.float32)
         gt_ = np.array(gt_).astype(np.float32)
@@ -79,12 +79,16 @@ class KittiFolder(Dataset):
         return im,gt
 
 
-'''for test'''
-k = KittiFolder()
-im = k.get_img()
-plt.figure('dog')
-plt.imshow(im)
-plt.show()
+import torch
+from tqdm import tqdm
+if __name__ == '__main__':
+    root_dir = ''
+    data_set = KittiFolder(root_dir,mode = 'train',size=(200,200))
+    data_loader = torch.utils.data.DataLoader(data_set,batch_size=1,shffle=False,num_workers=0)
+    print('data_set num is',len(data_loader))
+    for im ,gt in tqdm(data_loader):
+        print(im.size())
+
 
 
 

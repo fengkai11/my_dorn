@@ -66,11 +66,24 @@ class Crop(object):
         return self.__class__.__name__+'(i = {0},j={1},h={2},w={3})'.format(
             self.i,self.j,self.h,self.w
         )
+
+class Lambda(object):
+    def __init__(self,lambd):
+        self.lambd = lambd
+    def __call__(self, img):
+        return self.lambd(img)
+
 # class ColorJitter(object):
 #     def __init__(self,brightness=0, contrast=0, saturation=0, hue=0):
 #         self.brightness = brightness
 #         self.contrast = contrast
-#         self.saturation =
+#         self.saturation = saturation
+#         self.hue = hue
+#     @staticmethod
+#     def get_params(brightness,contrast,saturation,hue):
+#         transforms = []
+#         if brightness> 0:
+#
 
 
 face = misc.face()
