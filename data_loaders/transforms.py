@@ -1,6 +1,7 @@
 import scipy.ndimage.interpolation as itpl
 import scipy.misc as misc
 import numpy as np
+import torch
 
 
 class Rotate(object):
@@ -72,6 +73,12 @@ class Lambda(object):
         self.lambd = lambd
     def __call__(self, img):
         return self.lambd(img)
+class ToTensor(object):
+    def __call__(self,img):
+        if img.ndim == 3:
+            img = torch.from_numpy(img.transpose((2,0,1)).copy())
+        elif img.ndim == 2:
+            img= torch.from_numpy(img.copy())
 
 # class ColorJitter(object):
 #     def __init__(self,brightness=0, contrast=0, saturation=0, hue=0):
